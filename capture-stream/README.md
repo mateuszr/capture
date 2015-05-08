@@ -150,33 +150,35 @@ All messages are the serialized `Twitter` classes. You may either use JAXB unmar
 The XML format resembles the Twitter.java class, and looks similar to the following example:
  
 ```xml
-<tweet>
-    <dataPools />
-    <createdAt>2015-05-07T14:46:14+02:00</createdAt>
-    <dataSources />
-    <favouriteCount>0</favouriteCount>
-    <hashTags>DavidOrtegaUPyD, Libres</hashTags>
-    <tweetID>596294970912468993</tweetID>
-    <inReplyToId>-1</inReplyToId>
-    <latitude />
-    <longitude />
-    <originalTweetId>596286420605652992</originalTweetId>
-    <place />
-    <rawJson>{}</rawJson>
-    <retweetCount>15</retweetCount>
-    <sentiment>1.0</sentiment>
-    <source>
-        <a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>
-    </source>
-    <sourceUrls />
-    <text>RT @UPyD_AytoMadrid: #DavidOrtegaUPyD &gt;&gt; Queremos un Madrid limpio y una ciudad medioambientalmente sostenible @UPyD #Libres http://t.co/rQ…</text>
-    <userDescription />
-    <userFollowers>31</userFollowers>
-    <userFollowes>73</userFollowes>
-    <userID>2962759828</userID>
-    <userName />
-    <userScreenName>229829a917bc427</userScreenName>
-</tweet>
+<streamItem>
+	<tweet>
+	    <dataPools />
+	    <createdAt>2015-05-07T14:46:14+02:00</createdAt>
+	    <dataSources />
+	    <favouriteCount>0</favouriteCount>
+	    <hashTags>DavidOrtegaUPyD, Libres</hashTags>
+	    <tweetID>596294970912468993</tweetID>
+	    <inReplyToId>-1</inReplyToId>
+	    <latitude />
+	    <longitude />
+	    <originalTweetId>596286420605652992</originalTweetId>
+	    <place />
+	    <rawJson>{}</rawJson>
+	    <retweetCount>15</retweetCount>
+	    <sentiment>1.0</sentiment>
+	    <source>
+	        <a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>
+	    </source>
+	    <sourceUrls />
+	    <text>RT @UPyD_AytoMadrid: #DavidOrtegaUPyD &gt;&gt; Queremos un Madrid limpio y una ciudad medioambientalmente sostenible @UPyD #Libres http://t.co/rQ…</text>
+	    <userDescription />
+	    <userFollowers>31</userFollowers>
+	    <userFollowes>73</userFollowes>
+	    <userID>2962759828</userID>
+	    <userName />
+	    <userScreenName>229829a917bc427</userScreenName>
+	</tweet>
+</streamItem>
 ```
 
 Please note that there might be few more fields, depending on the current version, but in principle it should be always consistent with the Twitter.java file.
