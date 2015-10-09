@@ -17,6 +17,12 @@ public class QueryData {
 	private String tweetID;
 	
 	@Field
+	private long lastID;
+	
+	@Field
+	private boolean fromLastID;
+
+	@Field
 	private String type;
 		
 	@Field("keywords")
@@ -38,6 +44,8 @@ public class QueryData {
 		this.composedID = dcId + "-" + dsId;
 		this.dcID = dcId;
 		this.dsID = dsId;
+		this.lastID = Long.MAX_VALUE;
+		this.fromLastID = false;
 		this.type = type;
 		this.query = keywords;
 		this.captureStartDate = startDate;
@@ -110,6 +118,22 @@ public class QueryData {
 
 	public void setPositioninQueue(int positioninQueue) {
 		this.positioninQueue = positioninQueue;
+	}
+	
+	public long getLastID() {
+		return lastID;
+	}
+
+	public void setLastID(long lastID) {
+		this.lastID = lastID;
+	}
+
+	public boolean isFromLastID() {
+		return fromLastID;
+	}
+
+	public void setFromLastID(boolean fromLastID) {
+		this.fromLastID = fromLastID;
 	}
 	
 }

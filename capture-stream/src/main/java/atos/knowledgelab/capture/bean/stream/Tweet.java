@@ -1,5 +1,6 @@
 package atos.knowledgelab.capture.bean.stream;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,11 +18,17 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.apache.solr.client.solrj.beans.Field;
 
 @XmlRootElement(name="tweet")
-public class Tweet extends CaptureData{
+public class Tweet extends CaptureData implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	@Field("tweetID")
 	@XmlTransient
-	private String id;
+	private String tweetID;
 	
 	
 	@Field
@@ -34,7 +41,7 @@ public class Tweet extends CaptureData{
 	
 	@Field
 	@XmlTransient
-	private String source;
+	private /* transient */ String source;
 	
 	@Field
 	@XmlTransient
@@ -102,7 +109,7 @@ public class Tweet extends CaptureData{
 	
 	@Field("json")
 	@XmlTransient
-	private String rawJson;
+	private /* transient */ String rawJson;
 	
 	@Field("sentiment_feature")
 	@XmlTransient
@@ -122,11 +129,11 @@ public class Tweet extends CaptureData{
 	
 	@XmlElement(name="tweetID")
 	public String getId() {
-		return id;
+		return tweetID;
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		this.tweetID = id;
 	}
 
 	@XmlElement(name="text")
@@ -167,12 +174,12 @@ public class Tweet extends CaptureData{
 
 	@XmlElement(name="createdAt")
 	public Date getCreatedAt() throws ParseException {
-		String utcFormat = "yyyy-MM-dd'T'HH:mm:ssXXX";
-		SimpleDateFormat utcf = new SimpleDateFormat(utcFormat, Locale.ENGLISH);
-		utcf.setTimeZone(TimeZone.getTimeZone("UTC"));
-		utcf.setLenient(true);
-		return utcf.parse (utcf.format (createdAt));
-		//return createdAt.;
+//		String utcFormat = "yyyy-MM-dd'T'HH:mm:ssXXX";
+//		SimpleDateFormat utcf = new SimpleDateFormat(utcFormat, Locale.ENGLISH);
+//		utcf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//		utcf.setLenient(true);
+//		return utcf.parse (utcf.format (createdAt));
+		return createdAt;
 	}
 
 	public void setCreatedAt(Date createdAt) {

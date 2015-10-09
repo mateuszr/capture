@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -32,10 +33,12 @@ public class DataPool {
 		return poolID;
 	}
 
+	@XmlElement(name="poolID")
 	public void setPoolID(String poolID) {
 		this.poolID = poolID;
 	}
 
+	@XmlElement(name="name")
 	public String getName() {
 		return name;
 	}
@@ -44,6 +47,7 @@ public class DataPool {
 		this.name = name;
 	}
 
+	@XmlElement(name="description")
 	public String getDescription() {
 		return description;
 	}
@@ -64,6 +68,7 @@ public class DataPool {
 		return keywords;
 	}
 
+	@XmlElement(name="keyword")
 	public void setKeywords(List<String> keywords) {
 		this.keywords = keywords;
 	}

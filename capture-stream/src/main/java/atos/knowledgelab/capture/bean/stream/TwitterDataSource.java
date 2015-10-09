@@ -17,6 +17,12 @@ public class TwitterDataSource extends DataSource {
 	private String keywords;
 	
 	@XmlTransient
+	private long lastTweetId;
+	
+	@XmlTransient
+	private boolean fromLastTweetId;
+	
+	@XmlTransient
 	private List<Tweet> tweets = new ArrayList<Tweet>();
 
 	@XmlElement(name="keywords")
@@ -35,7 +41,25 @@ public class TwitterDataSource extends DataSource {
 	public void setTweets(List<Tweet> tweets) {
 		this.tweets = tweets;
 	}
+	
+	@XmlElement(name="lastTweetId")
+	public long getLastTweetId() {
+		return lastTweetId;
+	}
 
+	public void setLastTweetId(long lastTweetId) {
+		this.lastTweetId = lastTweetId;
+	}
+
+	@XmlElement(name="fromLastTweetId")
+	public boolean getFromLastTweetId() {
+		return fromLastTweetId;
+	}
+
+	public void setFromLastTweetId(boolean fromLastTweetId) {
+		this.fromLastTweetId = fromLastTweetId;
+	}
+	
 	@Override
 	public List <? extends CaptureData> getData() {
 		return tweets;

@@ -1,8 +1,5 @@
 package atos.knowledgelab.capture.bean.stream;
 
-
-
-
 public class StreamItem {
 	Tweet tweet;
 	String dataChannelId;

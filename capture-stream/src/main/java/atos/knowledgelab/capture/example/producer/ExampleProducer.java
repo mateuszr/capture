@@ -27,7 +27,7 @@ public class ExampleProducer {
 		conf.put("zookeeper.connect", "localhost:2181");
 		conf.put("serializer.class", "kafka.serializer.StringEncoder");
 		conf.put("request.required.acks", "1");
-		conf.put("kafka.topic", "test");
+		conf.put("kafka.topic", "pheme");
 		// props.put("partitioner.class", props.getProperty("partitioner.class"));
 
 		

@@ -21,6 +21,11 @@ public class DataSource {
 	@XmlTransient
 	private String dstype;
 	
+//	@XmlTransient
+//	private long lastTweetId;
+//	
+//	@XmlTransient
+//	private boolean fromLastTweetId;
 
 	@XmlElement(name="sourceID")
 	public String getSourceID() {
@@ -39,6 +44,23 @@ public class DataSource {
 	public void setDstype(String type) {
 		this.dstype = type;
 	}
+	
+//	public long getLastTweetId() {
+//		return lastTweetId;
+//	}
+//
+//	public void setLastTweetId(long lastTweetId) {
+//		this.lastTweetId = lastTweetId;
+//	}
+//
+//	public boolean getFromLastTweetId() {
+//		return fromLastTweetId;
+//	}
+//
+//	public void setFromLastTweetId(boolean fromLastTweetId) {
+//		this.fromLastTweetId = fromLastTweetId;
+//	}
+	
 	
 	public List<? extends CaptureData> getData(){
 		throw new RuntimeException("WARNING: DataSource is only instantiable due to datanucleus requirements. Every time you extend this class you MUST override this method");

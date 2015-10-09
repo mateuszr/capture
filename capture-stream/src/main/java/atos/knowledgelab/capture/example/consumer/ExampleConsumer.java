@@ -11,7 +11,7 @@ public class ExampleConsumer {
 		ConsumerClientConfig config = new ConsumerClientConfig();
 		config.setZooKeeperEndPoint("localhost:2181");
 		config.setGroupId("myGroup");
-		config.setTopicName("test");
+		config.setTopicName("pheme");
 		
 		ConsumerClient client = new ConsumerClient(config);
 		
