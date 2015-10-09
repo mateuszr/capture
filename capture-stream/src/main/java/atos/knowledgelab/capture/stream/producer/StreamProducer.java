@@ -92,7 +92,7 @@ public class StreamProducer {
 			// String>(kafkaTopic, DataObjectFactory.getRawJSON(status));
 			KeyedMessage<String, String> data = new KeyedMessage<String, String>(kafkaTopic, writer.toString());
 			kafkaProducer.send(data);
-			LOGGER.info(writer.toString());
+			//LOGGER.info(writer.toString());
 
 			
 		} catch (JAXBException e) {
