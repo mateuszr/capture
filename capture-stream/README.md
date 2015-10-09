@@ -145,40 +145,48 @@ public class ExampleApp {
 Message format
 --------------
 
-All messages are the serialized `Twitter` classes. You may either use JAXB unmarshaller for deserialization, or use custom XML parsing.
+All messages are the serialized `Twitter` classes. You may either use JAXB unmarshaller for deserialization, or use custom JSON parsing.
 
-The XML format resembles the Twitter.java class, and looks similar to the following example:
+The JSON format resembles the Twitter.java class, and looks similar to the following example:
  
-```xml
-<streamItem>
-	<tweet>
-	    <dataPools />
-	    <createdAt>2015-05-07T14:46:14+02:00</createdAt>
-	    <dataSources />
-	    <favouriteCount>0</favouriteCount>
-	    <hashTags>DavidOrtegaUPyD, Libres</hashTags>
-	    <tweetID>596294970912468993</tweetID>
-	    <inReplyToId>-1</inReplyToId>
-	    <latitude />
-	    <longitude />
-	    <originalTweetId>596286420605652992</originalTweetId>
-	    <place />
-	    <rawJson>{}</rawJson>
-	    <retweetCount>15</retweetCount>
-	    <sentiment>1.0</sentiment>
-	    <source>
-	        <a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>
-	    </source>
-	    <sourceUrls />
-	    <text>RT @UPyD_AytoMadrid: #DavidOrtegaUPyD &gt;&gt; Queremos un Madrid limpio y una ciudad medioambientalmente sostenible @UPyD #Libres http://t.co/rQ…</text>
-	    <userDescription />
-	    <userFollowers>31</userFollowers>
-	    <userFollowes>73</userFollowes>
-	    <userID>2962759828</userID>
-	    <userName />
-	    <userScreenName>229829a917bc427</userScreenName>
-	</tweet>
-</streamItem>
+```JSON
+{
+    "queryData": {
+        "captureEndDate": "2015-10-18T22:34:59Z",
+        "captureStartDate": "2015-10-06T14:34:59Z",
+        "composedID": "828db5b9-354b8ada-0b6e-4c53-b0df-182781db1d5d",
+        "dcID": "828db5b9",
+        "dsID": "354b8ada-0b6e-4c53-b0df-182781db1d5d",
+        "fromLastID": "false",
+        "lastID": "0",
+        "positioninQueue": "0",
+        "query": "obama;;;",
+        "type": "stream"
+    },
+    "tweet": {
+        "createdAt": "2015-10-09T20:41:29+01:00",
+        "dataID": "Tweet652569592057860096",
+        "dataPools": null,
+        "dataSources": null,
+        "favouriteCount": "0",
+        "hashTags": "",
+        "inReplyToId": "-1",
+        "originalTweetId": "652563634569109504",
+        "retweetCount": "0",
+        "rawJson": "{}",
+        "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+        "sourceUrls": "https://t.co/O0dsB1JQRa",
+        "text": "RT @baseballcrank: You think you've seen a new low in political spin, then you read \"pro-Massacre activists\" https://t.co/O0dsB1JQRa",
+        "tweetID": "652569592057860096",
+        "userDescription": "success through persistence (blood/sweat/tears) In the City of Angels, my horns blend in rather well\nKick. Flip. Twist.",
+        "userFollowers": "1466",
+        "userFollowes": "1998",
+        "userID": "2160070393",
+        "userScreenName": "bmenyhert"
+    }
+}
+        
+
 ```
 
 Please note that there might be few more fields, depending on the current version, but in principle it should be always consistent with the Twitter.java file.
