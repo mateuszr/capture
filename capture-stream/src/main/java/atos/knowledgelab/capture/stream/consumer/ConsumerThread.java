@@ -44,9 +44,9 @@ public class ConsumerThread implements Runnable {
         //the main loop where we receive messages form the kafka broker
         while (it.hasNext()) {
         	String msg = new String(it.next().message());
-        	LOGGER.info("Thread " + threadNumber + ": " + msg);
+        	//LOGGER.info("Thread " + threadNumber + ": " + msg);
             
-            //unmarshall xml message:
+            	//unmarshall xml message:
             
 			try {
 				StreamItem streamItemElement = unmarshaller.unmarshalFromJSON(new StringReader(msg), StreamItem.class);
