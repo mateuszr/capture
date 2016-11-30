@@ -19,6 +19,7 @@ Here is the instruction for quickly setup a running kafka client:
 2) Build the "capture-stream" module with maven
 
 ```bash
+git clone git@github.com:mateuszr/capture.git
 cd capture/capture-stream
 mvn clean install
 ```
