@@ -80,7 +80,7 @@ public class StreamProducer<T> {
 		
 		mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
-		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		//mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
 		serializer = serializerObject; 
 	}
@@ -104,7 +104,7 @@ public class StreamProducer<T> {
 			//String message = mapper.writeValueAsString(item);
 			
 			String message = serializer.serialize(item);
-        	LOGGER.info(message);
+        	//LOGGER.info(message);
 
         	
 			KeyedMessage<String, String> data = new KeyedMessage<String, String>(kafkaTopic, message);
