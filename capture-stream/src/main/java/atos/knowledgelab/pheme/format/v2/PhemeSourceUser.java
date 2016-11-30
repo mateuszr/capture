@@ -24,50 +24,44 @@
  *      Miguel Angel Tinte García (ATOS, ARI, Knowledge Lab)
  *      
  *******************************************************************************/
-package atos.knowledgelab.capture.bean.stream;
+package atos.knowledgelab.pheme.format.v2;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlTransient;
 
-@XmlAccessorType(XmlAccessType.NONE)
-public class CaptureData {
-		
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class PhemeSourceUser {
+
+	@JsonProperty("screen_name")
 	@XmlTransient
-	private String dataID;
+	String screenName;
 	
-	@XmlTransient	
-	private List<DataPool> dataPools = new ArrayList<DataPool>();	
+
+	@JsonProperty("location")
+	@XmlTransient
+	String location;
+
+
+	public String getScreenName() {
+		return screenName;
+	}
+
+
+	public void setScreenName(String screenName) {
+		this.screenName = screenName;
+	}
+
+
+	public String getLocation() {
+		return location;
+	}
+
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
 	
-	public List <? extends DataSource> getDataSources(){
-		throw new RuntimeException("WARNING: CaptureData is only instantiable due to datanucleus requirements. Every time you extend this class you MUST override this method");
-	}
-			
-	@XmlElementWrapper(name="dataPools")
-	@XmlElements({
-	     @XmlElement(name="poolID", type=DataPool.class)	     
-	})
-	public List<DataPool> getDataPools() {
-		return dataPools;
-	}
-
-	public void setDataPools(List<DataPool> dataPools) {
-		this.dataPools = dataPools;
-	}
-
-	@XmlElement(name="dataID")
-	public String getDataID() {
-		return dataID;
-	}
-
-	public void setDataID(String dataID) {
-		this.dataID = dataID;
-	}		
+	
 }

@@ -24,50 +24,28 @@
  *      Miguel Angel Tinte García (ATOS, ARI, Knowledge Lab)
  *      
  *******************************************************************************/
-package atos.knowledgelab.capture.bean.stream;
+package atos.knowledgelab.capture.stream.example.pheme;
+
+import java.text.ParseException;
+import java.util.Observable;
+import java.util.Observer;
+
+import atos.knowledgelab.pheme.format.v2.PhemeSource;
+
+public class MessageReceiver implements Observer {
+
+	public void update(Observable o, Object arg) {
+		//The object we receive here is of class StreamItem 
+		PhemeSource ps = (PhemeSource) arg;
+
+		//print the text of the tweet or do some processing
+
+		System.out.println("Created at: " + ps.getCreatedAt());
+		System.out.println("Type: " + ps.getSourceType());
+		System.out.println("Content: " + ps.getText());
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlTransient;
-
-@XmlAccessorType(XmlAccessType.NONE)
-public class CaptureData {
 		
-	@XmlTransient
-	private String dataID;
-	
-	@XmlTransient	
-	private List<DataPool> dataPools = new ArrayList<DataPool>();	
-	
-	public List <? extends DataSource> getDataSources(){
-		throw new RuntimeException("WARNING: CaptureData is only instantiable due to datanucleus requirements. Every time you extend this class you MUST override this method");
-	}
-			
-	@XmlElementWrapper(name="dataPools")
-	@XmlElements({
-	     @XmlElement(name="poolID", type=DataPool.class)	     
-	})
-	public List<DataPool> getDataPools() {
-		return dataPools;
 	}
 
-	public void setDataPools(List<DataPool> dataPools) {
-		this.dataPools = dataPools;
-	}
-
-	@XmlElement(name="dataID")
-	public String getDataID() {
-		return dataID;
-	}
-
-	public void setDataID(String dataID) {
-		this.dataID = dataID;
-	}		
 }

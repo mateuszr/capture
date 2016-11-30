@@ -24,50 +24,62 @@
  *      Miguel Angel Tinte García (ATOS, ARI, Knowledge Lab)
  *      
  *******************************************************************************/
-package atos.knowledgelab.capture.bean.stream;
-
+package atos.knowledgelab.pheme.format.v2;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlTransient;
 
-@XmlAccessorType(XmlAccessType.NONE)
-public class CaptureData {
-		
-	@XmlTransient
-	private String dataID;
-	
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class PhemeSourceFeatures {
+
+	@JsonProperty("anti_stigma")
 	@XmlTransient	
-	private List<DataPool> dataPools = new ArrayList<DataPool>();	
+	String antiStigma;
 	
-	public List <? extends DataSource> getDataSources(){
-		throw new RuntimeException("WARNING: CaptureData is only instantiable due to datanucleus requirements. Every time you extend this class you MUST override this method");
+	@JsonProperty("advert")
+	@XmlTransient	
+	String advert;
+	
+	@JsonProperty("sentiment")
+	@XmlTransient	
+	String sentiment;
+	
+	@JsonProperty("event_cluster")
+	@XmlTransient	
+	List<Long> cluster = new ArrayList<Long>();
+	
+	
+	public String getAntiStigma() {
+		return antiStigma;
 	}
-			
-	@XmlElementWrapper(name="dataPools")
-	@XmlElements({
-	     @XmlElement(name="poolID", type=DataPool.class)	     
-	})
-	public List<DataPool> getDataPools() {
-		return dataPools;
+	public void setAntiStigma(String antiStigma) {
+		this.antiStigma = antiStigma;
 	}
-
-	public void setDataPools(List<DataPool> dataPools) {
-		this.dataPools = dataPools;
+	public String getAdvert() {
+		return advert;
 	}
-
-	@XmlElement(name="dataID")
-	public String getDataID() {
-		return dataID;
+	public void setAdvert(String advert) {
+		this.advert = advert;
 	}
-
-	public void setDataID(String dataID) {
-		this.dataID = dataID;
-	}		
+	public String getSentiment() {
+		return sentiment;
+	}
+	public void setSentiment(String sentiment) {
+		this.sentiment = sentiment;
+	}
+	public List<Long> getCluster() {
+		return cluster;
+	}
+	public void setCluster(List<Long> cluster) {
+		this.cluster = cluster;
+	}
+	
+	
+	
+	
 }

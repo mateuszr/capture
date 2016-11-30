@@ -24,50 +24,30 @@
  *      Miguel Angel Tinte García (ATOS, ARI, Knowledge Lab)
  *      
  *******************************************************************************/
-package atos.knowledgelab.capture.bean.stream;
+package atos.knowledgelab.pheme.format.v2;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
-import java.util.List;
+public class StigmaAdvertFeatures {
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlTransient;
-
-@XmlAccessorType(XmlAccessType.NONE)
-public class CaptureData {
-		
-	@XmlTransient
-	private String dataID;
+	@JsonProperty("Anti-Stigma")
+	String stigma;
 	
-	@XmlTransient	
-	private List<DataPool> dataPools = new ArrayList<DataPool>();	
+	@JsonProperty("Advert")
+	String advert;
 	
-	public List <? extends DataSource> getDataSources(){
-		throw new RuntimeException("WARNING: CaptureData is only instantiable due to datanucleus requirements. Every time you extend this class you MUST override this method");
+	public String getStigma() {
+		return stigma;
 	}
-			
-	@XmlElementWrapper(name="dataPools")
-	@XmlElements({
-	     @XmlElement(name="poolID", type=DataPool.class)	     
-	})
-	public List<DataPool> getDataPools() {
-		return dataPools;
+	public void setStigma(String stigma) {
+		this.stigma = stigma;
 	}
-
-	public void setDataPools(List<DataPool> dataPools) {
-		this.dataPools = dataPools;
+	public String getAdvert() {
+		return advert;
+	}
+	public void setAdvert(String advert) {
+		this.advert = advert;
 	}
 
-	@XmlElement(name="dataID")
-	public String getDataID() {
-		return dataID;
-	}
-
-	public void setDataID(String dataID) {
-		this.dataID = dataID;
-	}		
+	
 }

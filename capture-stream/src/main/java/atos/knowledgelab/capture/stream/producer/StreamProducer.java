@@ -1,63 +1,88 @@
+/*******************************************************************************
+ * Copyright (C) 2016  ATOS Spain S.A.
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contributors:
+ *      Mateusz Radzimski (ATOS, ARI, Knowledge Lab)
+ *      Iván Martínez Rodriguez (ATOS, ARI, Knowledge Lab)
+ *      María Angeles Sanguino Gonzalez (ATOS, ARI, Knowledge Lab)
+ *      Jose María Fuentes López (ATOS, ARI, Knowledge Lab)
+ *      Jorge Montero Gómez (ATOS, ARI, Knowledge Lab)
+ *      Ana Luiza Pontual Costa E Silva (ATOS, ARI, Knowledge Lab)
+ *      Miguel Angel Tinte García (ATOS, ARI, Knowledge Lab)
+ *      
+ *******************************************************************************/
 package atos.knowledgelab.capture.stream.producer;
 
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
-import org.codehaus.jackson.impl.JsonWriteContext;
-
-import com.sun.jersey.api.json.JSONJAXBContext;
-import com.sun.jersey.api.json.JSONMarshaller;
-
-import atos.knowledgelab.capture.bean.stream.StreamItem;
-import atos.knowledgelab.capture.bean.stream.Tweet;
-import atos.knowledgelab.capture.stream.config.JSONJAXBContextResolver;
-import atos.knowledgelab.capture.stream.config.StreamProducerConfig;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
+import atos.knowledgelab.capture.bean.stream.StreamItem;
+import atos.knowledgelab.capture.bean.stream.Tweet;
+import atos.knowledgelab.capture.stream.config.StreamProducerConfig;
+import atos.knowledgelab.capture.stream.serializers.ISerialize;
 
-public class StreamProducer {
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+public class StreamProducer<T> {
 
 	private Producer<String, String> kafkaProducer;
 	private static Logger LOGGER = Logger.getLogger(StreamProducer.class.getName());
-	private String kafkaTopic;
-	private StreamProducerConfig configuration;
+	private String kafkaTopic;	
+	private String streamSerializer;
 	private JAXBContext jc;
-	private JSONMarshaller marshaller;
-	private String serialisationFormat = "json";
+	//private JSONMarshaller marshaller;
+	private ObjectMapper mapper;
+	private final String defaultSerializer = "atos.knowledgelab.capture.stream.serializers.impl.StreamItemSerialize";
+	private ISerialize<T> serializer;
 	
-	public StreamProducer(StreamProducerConfig config) throws JAXBException {
+	public StreamProducer(StreamProducerConfig config, ISerialize<T> serializerObject) throws Exception {
 
 		/** Kafka producer properties **/
-//		Properties props = new Properties();
-//		// props.load(this.getClass().getClassLoader().getResourceAsStream("kafka.properties"));
-//
-//		props.put("metadata.broker.list", "localhost:9092");
-//		props.put("serializer.class", "kafka.serializer.StringEncoder");
-//		props.put("request.required.acks", "1");
-		// props.put("partitioner.class", props.getProperty("partitioner.class"));
 
 		ProducerConfig kafkaConfig = new ProducerConfig(config);
 		kafkaProducer = new Producer<String, String>(kafkaConfig);
 
 		kafkaTopic = config.getProperty("kafka.topic");
-		//kafkaTopic = "test";
-
+		streamSerializer = config.getProperty("stream.serializer.class");
+		
+		if (streamSerializer == null || streamSerializer.length() == 0) {
+			streamSerializer = defaultSerializer;
+		}
 		//create JAXB context for stream item class
 		//NOTE: Do not invoke this in a loop, to avoid classloader leak problem.
-		this.jc = new JSONJAXBContextResolver().getContext(StreamItem.class);
-		this.marshaller = ((JSONJAXBContext) jc).createJSONMarshaller();
+		//this.jc = new JSONJAXBContextResolver().getContext(StreamItem.class);
+		//this.marshaller = ((JSONJAXBContext) jc).createJSONMarshaller();
 		
+		mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+		serializer = serializerObject; 
 	}
 
 	/*
@@ -66,44 +91,28 @@ public class StreamProducer {
 	 * thread safe. For now this method is "synchronized".  
 	 * 
 	 */
-	public synchronized void send(StreamItem item) {
-		// The EventBuilder is used to build an event using the
-		// the raw JSON of a tweet
-		//LOGGER.info(item.getTweet().getUserScreenName() + ": " + item.getTweet().getText());
-
-		// create object to be send
-		// StreamItem si = new StreamItem();
-		// si.setDataChannelId(dataChannelId);
-		// si.setDataSourceId(dataSourceId);
-		// si.setQueryData(query);
-		// si.setTweet(TweetUtils.getTweetFromStatus(status));
+	public synchronized void send(T item) {
 
 		Writer writer = new StringWriter();
 
-		// serialize the java class to XML file
+		// serialize the java class to JSON file
 		try {
-			//JAXBContext jc = JAXBContext.newInstance(StreamItem.class);
-			//Marshaller marshaller = jc.createMarshaller();
-			// marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			JAXBElement<StreamItem> jaxbElement = new JAXBElement<StreamItem>(new QName("streamItem"), StreamItem.class, item);
-			marshaller.marshallToJSON(jaxbElement, writer);
+
+			//JAXBElement<StreamItem> jaxbElement = new JAXBElement<StreamItem>(new QName("streamItem"), StreamItem.class, item);
+			//marshaller.marshallToJSON(jaxbElement, writer);
 			
-			// KeyedMessage<String, String> data = new KeyedMessage<String,
-			// String>(kafkaTopic, DataObjectFactory.getRawJSON(status));
-			KeyedMessage<String, String> data = new KeyedMessage<String, String>(kafkaTopic, writer.toString());
+			//String message = mapper.writeValueAsString(item);
+			
+			String message = serializer.serialize(item);
+        	LOGGER.info(message);
+
+        	
+			KeyedMessage<String, String> data = new KeyedMessage<String, String>(kafkaTopic, message);
 			kafkaProducer.send(data);
-			//LOGGER.info(writer.toString());
-
 			
-		} catch (JAXBException e) {
-			LOGGER.info("Tweet serialisation error! " + e);
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			e.printStackTrace();
-
 		} catch (Exception e) {
 			LOGGER.info("Stream producer: Error while sending tweet! " + e);
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);			
-			e.printStackTrace();	
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);						
 		}
 
 
@@ -118,41 +127,28 @@ public class StreamProducer {
 	public synchronized void send(Tweet tweet) {
 		// The EventBuilder is used to build an event using the
 		// the raw JSON of a tweet
-		// LOGGER.info(status.getUser().getScreenName() + ": " +
-		// status.getText());
 
 		// create object to be send
 		StreamItem si = new StreamItem();
-		// si.setDataChannelId(dataChannelId);
-		// si.setDataSourceId(dataSourceId);
-		// si.setQueryData(query);
+
 		si.setTweet(tweet);
 
 		Writer writer = new StringWriter();
 
 		// serialize the java class to XML file
 		try {
-			//JAXBContext jc = JAXBContext.newInstance(StreamItem.class);
-			//Marshaller marshaller = jc.createMarshaller();
-			// marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			JAXBElement<StreamItem> jaxbElement = new JAXBElement<StreamItem>(new QName("streamItem"), StreamItem.class, si);
-			marshaller.marshallToJSON(jaxbElement, writer);
 			
-			// KeyedMessage<String, String> data = new KeyedMessage<String,
-			// String>(kafkaTopic, DataObjectFactory.getRawJSON(status));
-			KeyedMessage<String, String> data = new KeyedMessage<String, String>(kafkaTopic, writer.toString());
-
+			//JAXBElement<StreamItem> jaxbElement = new JAXBElement<StreamItem>(new QName("streamItem"), StreamItem.class, si);
+			//marshaller.marshallToJSON(jaxbElement, writer);
+			String message = mapper.writeValueAsString(tweet);
+			
+			KeyedMessage<String, String> data = new KeyedMessage<String, String>(kafkaTopic, message);
 			kafkaProducer.send(data);
-		} catch (JAXBException e) {
-			LOGGER.info("Tweet serialisation error! " + e);
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			e.printStackTrace();
+			
 		} catch (Exception e) {
 			LOGGER.info("Stream producer: Error while sending tweet! ");
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);			
 		}
-
 
 	}
 }

@@ -24,66 +24,23 @@
  *      Miguel Angel Tinte García (ATOS, ARI, Knowledge Lab)
  *      
  *******************************************************************************/
-package atos.knowledgelab.capture.client.messages;
+package atos.knowledgelab.capture.stream.example.simple;
 
-import java.util.ArrayList;
 import java.util.Observable;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.SynchronousQueue;
+import java.util.Observer;
 
-import atos.knowledgelab.capture.bean.stream.KafkaMessage;
 import atos.knowledgelab.capture.bean.stream.StreamItem;
 
+public class MessageReceiver implements Observer {
 
+	public void update(Observable o, Object arg) {
+		//The object we receive here is of class StreamItem 
+		StreamItem si = (StreamItem) arg;
 
-public class MessageDispatcher<T> extends Observable {
-
-	/*
-	
-	//experimental code
-	ConcurrentLinkedQueue<KafkaMessage> queue = new ConcurrentLinkedQueue<KafkaMessage>();
-	ConcurrentLinkedDeque<StreamItem> dequeue = new ConcurrentLinkedDeque<StreamItem>();
-	Boolean batchMode = false;
-	Integer batchSize = 10;
-	*/
-	
-//	private () {
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	/**
-//	 * SingletonHolder is loaded on the first execution of
-//	 * Singleton.getInstance() or the first access to SingletonHolder.INSTANCE,
-//	 * not before.
-//	 */
-//	private static class SingletonHolder {
-//		public static final MessageDispatcher INSTANCE = new MessageDispatcher();
-//	}
-//
-//	public static MessageDispatcher getInstance() {
-//		return SingletonHolder.INSTANCE;
-//	}
-
-	public MessageDispatcher() {
+		//print the text of the tweet
+		System.out.println(si.getTweet().getText());
+		
 		
 	}
-	
-	//the method that receives all messages from kafka clients
-	public void offer(T msg) {
 
-		setChanged();
-		notifyObservers(msg);
-		
-	}
-	
-	/*
-	public StreamItem getLatest() throws InterruptedException {
-		return this.dequeue.peekFirst();
-	}
-	
-	public KafkaMessage poll() throws InterruptedException {
-		return queue.poll();
-	}
-	*/
 }

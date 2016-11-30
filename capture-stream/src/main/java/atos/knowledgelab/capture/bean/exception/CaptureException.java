@@ -24,61 +24,43 @@
  *      Miguel Angel Tinte García (ATOS, ARI, Knowledge Lab)
  *      
  *******************************************************************************/
-package atos.knowledgelab.capture.bean.stream;
+package atos.knowledgelab.capture.bean.exception;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+public class CaptureException extends Exception  {
 
-@XmlAccessorType(XmlAccessType.NONE)
-@JsonTypeInfo(use = Id.NAME,
-	include = JsonTypeInfo.As.PROPERTY,
-	property = "type")
-@JsonSubTypes({
-    @Type(value = TwitterDataSource.class, name = "twitter")
-    })
-public class DataSource {
-	
-	public DataSource(){
-		//this.sourceID =  UUID.randomUUID().toString();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public CaptureException(){
+		super();
 	}
 	
-	@XmlTransient
-	private String sourceID;
-	
-	@XmlTransient
-	private String dstype;
-	
+	//Constructor that accepts a message
+    public CaptureException(String message) {
+       super(message);
+    }
 
-	@XmlElement(name="sourceID")
-	public String getSourceID() {
-		return sourceID;
-	}
+    public CaptureException(String message, Throwable cause) { 
+    	super(message, cause); 
+    }
+    
+    public CaptureException(Throwable cause) { 
+    	super(cause); 
+    }
+    
+    @Override
+    public StackTraceElement[] getStackTrace() {
+        return super.getStackTrace();
+    }
 
-	public void setSourceID(String sourceID) {
-		this.sourceID = sourceID;
-	}
-
-	@XmlElement(name="type")
-	public String getDstype() {
-		return dstype;
-	}
-
-	public void setDstype(String type) {
-		this.dstype = type;
-	}
-		
-	public List<? extends CaptureData> getData(){
-		throw new RuntimeException("WARNING: DataSource is only instantiable due to datanucleus requirements. Every time you extend this class you MUST override this method");
-	}
-	
+    @Override
+    public Throwable getCause() {
+        return super.getCause();
+    }
+    
 }

@@ -24,50 +24,33 @@
  *      Miguel Angel Tinte García (ATOS, ARI, Knowledge Lab)
  *      
  *******************************************************************************/
-package atos.knowledgelab.capture.bean.stream;
+package atos.knowledgelab.pheme.format.v2;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlTransient;
-
-@XmlAccessorType(XmlAccessType.NONE)
-public class CaptureData {
-		
-	@XmlTransient
-	private String dataID;
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+public class SDQC {
 	
-	@XmlTransient	
-	private List<DataPool> dataPools = new ArrayList<DataPool>();	
+	String label;
 	
-	public List <? extends DataSource> getDataSources(){
-		throw new RuntimeException("WARNING: CaptureData is only instantiable due to datanucleus requirements. Every time you extend this class you MUST override this method");
-	}
-			
-	@XmlElementWrapper(name="dataPools")
-	@XmlElements({
-	     @XmlElement(name="poolID", type=DataPool.class)	     
-	})
-	public List<DataPool> getDataPools() {
-		return dataPools;
+	double probability;
+
+	public String getLabel() {
+		return label;
 	}
 
-	public void setDataPools(List<DataPool> dataPools) {
-		this.dataPools = dataPools;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
-	@XmlElement(name="dataID")
-	public String getDataID() {
-		return dataID;
+	public double getProbability() {
+		return probability;
 	}
 
-	public void setDataID(String dataID) {
-		this.dataID = dataID;
-	}		
+	public void setProbability(double probability) {
+		this.probability = probability;
+	}
+	
+	
+	
 }

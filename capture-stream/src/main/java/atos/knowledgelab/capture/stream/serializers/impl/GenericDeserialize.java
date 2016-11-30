@@ -24,50 +24,34 @@
  *      Miguel Angel Tinte García (ATOS, ARI, Knowledge Lab)
  *      
  *******************************************************************************/
-package atos.knowledgelab.capture.bean.stream;
+package atos.knowledgelab.capture.stream.serializers.impl;
 
+import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlTransient;
+import atos.knowledgelab.capture.bean.stream.StreamItem;
+import atos.knowledgelab.capture.stream.serializers.IDeserialize;
 
-@XmlAccessorType(XmlAccessType.NONE)
-public class CaptureData {
+public class GenericDeserialize<T> implements IDeserialize {
+	
+	private ObjectMapper mapper;
+
+	private Class<T> classType;
+	
+	public GenericDeserialize (Class<T> messageClass) {
+		mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		classType = messageClass;
+	}
+	
+	
+	public T deserialize(String item) throws IOException {
+		T streamItemElement = mapper.readValue(item, classType);
+		return streamItemElement;
+
 		
-	@XmlTransient
-	private String dataID;
-	
-	@XmlTransient	
-	private List<DataPool> dataPools = new ArrayList<DataPool>();	
-	
-	public List <? extends DataSource> getDataSources(){
-		throw new RuntimeException("WARNING: CaptureData is only instantiable due to datanucleus requirements. Every time you extend this class you MUST override this method");
 	}
-			
-	@XmlElementWrapper(name="dataPools")
-	@XmlElements({
-	     @XmlElement(name="poolID", type=DataPool.class)	     
-	})
-	public List<DataPool> getDataPools() {
-		return dataPools;
-	}
-
-	public void setDataPools(List<DataPool> dataPools) {
-		this.dataPools = dataPools;
-	}
-
-	@XmlElement(name="dataID")
-	public String getDataID() {
-		return dataID;
-	}
-
-	public void setDataID(String dataID) {
-		this.dataID = dataID;
-	}		
 }
