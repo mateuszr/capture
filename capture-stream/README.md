@@ -32,21 +32,21 @@ Basically you need to start zookeeper and kafka server. This example will use "t
 4) Run examples bundled with this project:
 
 This project contains 2 example applications: Consumer and Producer.
-See `atos.knowledgelab.capture.example` packages for the source code.
+See `atos.knowledgelab.capture.stream.example` packages for the source code.
 The `capture-stream` build will create a jar file in `target` folder with packaged dependencies and examples. You can use them to test your kafka setup.
 
 Running example consumer:
 
 ```bash
 cd target
-java -cp capture-stream-0.0.1-SNAPSHOT-jar-with-dependencies.jar atos.knowledgelab.capture.example.consumer.ExampleConsumer
+java -cp capture-stream-0.0.1-SNAPSHOT-jar-with-dependencies.jar atos.knowledgelab.capture.stream.example.pheme.ExampleConsumer
 ```
 
 Running example producer (preferably in other terminal):
 
 ```bash
 cd target
-java -cp capture-stream-0.0.1-SNAPSHOT-jar-with-dependencies.jar atos.knowledgelab.capture.example.producer.ExampleProducer
+java -cp capture-stream-0.0.1-SNAPSHOT-jar-with-dependencies.jar atos.knowledgelab.capture.stream.example.pheme.ExampleProducer
 ```
 
 After starting both examples, the consumer application should start receiving messages. 
@@ -113,7 +113,9 @@ public class ExampleApp {
 		config.setGroupId("myGroup");
 		config.setTopicName("test");
 		
-		ConsumerClient client = new ConsumerClient(config);
+		IDeserialize<StreamItem> deserializer = new StreamItemDeserialize();
+		
+		ConsumerClient<StreamItem> client = new ConsumerClient<StreamItem>(config, deserializer);
 		
 		//instantiate the message receiver class (Observer)
 		MessageReceiver mr = new MessageReceiver();
@@ -140,58 +142,5 @@ public class ExampleApp {
 ```
 
 7) Now you can run the ExampleApp class and you are now ready to receive messages from the "test" topic. 
-
-
-Message format
---------------
-
-All messages are the serialized `Twitter` classes. You may either use JAXB unmarshaller for deserialization, or use custom JSON parsing.
-
-The JSON format resembles the Twitter.java class, and looks similar to the following example:
- 
-```JSON
-{
-    "queryData": {
-        "captureEndDate": "2015-10-18T22:34:59Z",
-        "captureStartDate": "2015-10-06T14:34:59Z",
-        "composedID": "828db5b9-354b8ada-0b6e-4c53-b0df-182781db1d5d",
-        "dcID": "828db5b9",
-        "dsID": "354b8ada-0b6e-4c53-b0df-182781db1d5d",
-        "fromLastID": "false",
-        "lastID": "0",
-        "positioninQueue": "0",
-        "query": "obama;;;",
-        "type": "stream"
-    },
-    "tweet": {
-        "createdAt": "2015-10-09T20:41:29+01:00",
-        "dataID": "Tweet652569592057860096",
-        "dataPools": null,
-        "dataSources": null,
-        "favouriteCount": "0",
-        "hashTags": "",
-        "inReplyToId": "-1",
-        "originalTweetId": "652563634569109504",
-        "retweetCount": "0",
-        "rawJson": "{}",
-        "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
-        "sourceUrls": "https://t.co/O0dsB1JQRa",
-        "text": "RT @baseballcrank: You think you've seen a new low in political spin, then you read \"pro-Massacre activists\" https://t.co/O0dsB1JQRa",
-        "tweetID": "652569592057860096",
-        "userDescription": "success through persistence (blood/sweat/tears) In the City of Angels, my horns blend in rather well\nKick. Flip. Twist.",
-        "userFollowers": "1466",
-        "userFollowes": "1998",
-        "userID": "2160070393",
-        "userScreenName": "bmenyhert"
-    }
-}
-        
-
-```
-
-Please note that there might be few more fields, depending on the current version, but in principle it should be always consistent with the Twitter.java file.
-
-We also provide "rawJson" field, to get the raw result as it comes from the Twitter API. This can be useful for retrieving other fields (such as user information). You might use it to speed up paring, by retrieving only "<rawJson>" field from the XML, and use JSON parser, which should be faster. 
-
 
 
